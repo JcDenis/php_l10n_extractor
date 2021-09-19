@@ -35,18 +35,18 @@ echo sprintf('<pre>%s</pre>', print_r(php_l10n_extractor($content), true));
 function php_l10n_extractor(string $content, string $func = '__'): array
 {
     $duplicate = $final_strings = [];
-    // split content by starting of translation function
-    $parts = explode($func . "(", $content);
+    // split content by translation function
+    $parts = explode($func . '(', $content);
     // remove fisrt element from array
     array_shift($parts);
-    // put removed parenthesis
+    // put back first parenthesis
     $parts = array_map(function($v){ return '(' . $v;}, $parts);
     // walk through parts
     foreach($parts as $part) {
         // find pairs of parenthesis
         preg_match_all("/\((?:[^\)\(]+|(?R))*+\)/s", $part, $subparts);
         // find quoted strings (single or double)
-        preg_match_all("/\'(?:[^\'']+)\'|\"(?:[^\"]+)\"/s", $subparts[0][0], $strings);
+        preg_match_all("/\'(?:[^\']+)\'|\"(?:[^\"]+)\"/s", $subparts[0][0], $strings);
         // strings exist
         if (!empty($strings[0])) {
             // remove quotes
